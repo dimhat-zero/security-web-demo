@@ -12,14 +12,14 @@
        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
 	
-    <!-- 开启controller注解支持 -->
-    <context:component-scan base-package="org.dimhat.security.controller">
-    	<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-    </context:component-scan>
+	<!-- 开启controller注解支持 -->
+	<context:component-scan base-package="org.dimhat.security.controller">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
     
-	<mvc:annotation-driven validator="validator" conversion-service="conversionService" >
+	<mvc:annotation-driven validator="validator" >
 		<mvc:argument-resolvers>  
-	        <bean class="com.jianla.argumentresolver.SessionInfoArgumentResolver"/>
+	        <bean class="org.dimhat.security.web.resolver.UserInfoArgumentResolver"/>
 	    </mvc:argument-resolvers>	  
 		<mvc:message-converters>
 			<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
@@ -35,21 +35,21 @@
 		</mvc:message-converters>
 	</mvc:annotation-driven>
     
-    <!-- 当在web.xml 中   DispatcherServlet使用 <url-pattern>/</url-pattern> 映射时，能映射静态资源 -->
-    <mvc:default-servlet-handler/>
+	<!-- 当在web.xml 中   DispatcherServlet使用 <url-pattern>/</url-pattern> 映射时，能映射静态资源 -->
+	<mvc:default-servlet-handler/>
 	
-    <!-- 静态资源映射 -->
-    <mvc:resources mapping="/static/**" location="/WEB-INF/static/"/>
+	<!-- 静态资源映射 -->
+	<mvc:resources mapping="/static/**" location="/WEB-INF/static/"/>
     
 
-    <!-- 默认的视图解析器 在上边的解析错误时使用 (默认使用html)- -->
-    <bean id="defaultViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-          p:order="1">
-        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-        <property name="contentType" value="text/html"/>
-        <property name="prefix" value="/WEB-INF/jsp/"/>
-        <property name="suffix" value=".jsp"/>
-    </bean>
+	<!-- 默认的视图解析器 在上边的解析错误时使用 (默认使用html)- -->
+	<bean id="defaultViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+	      p:order="1">
+	    <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+	    <property name="contentType" value="text/html"/>
+	    <property name="prefix" value="/WEB-INF/jsp/"/>
+	    <property name="suffix" value=".jsp"/>
+	</bean>
 
     <!-- 控制器异常处理 -->
     <bean id="exceptionHandlerExceptionResolver" class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
@@ -67,10 +67,6 @@
         <property name="defaultEncoding" value="UTF-8"/>
         <property name="cacheSeconds" value="60"/>
     </bean>
-    
-	<!-- 类型转换及数据格式化-->
-    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"/>
-     
     
 	<!-- 以下 validator  ConversionService 在使用 mvc:annotation-driven 会 自动注册-->
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">

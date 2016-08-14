@@ -1,4 +1,4 @@
-package org.dimhat.security.interceptor;
+package org.dimhat.security.web.interceptor;
 
 import java.lang.reflect.Method;
 import java.util.UUID;
@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.dimhat.security.annotation.Token;
+import org.dimhat.security.web.annotation.Token;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
