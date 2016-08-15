@@ -1,5 +1,7 @@
 package org.dimhat.security.web.resolver;
 
+import org.dimhat.security.Constant;
+import org.dimhat.security.exception.UserNotLoginException;
 import org.dimhat.security.web.annotation.UserInfo;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -34,7 +36,14 @@ public class UserInfoArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        return webRequest.getAttribute("userInfo", RequestAttributes.SCOPE_SESSION);
+		Object object = webRequest.getAttribute(Constant.userInfo, RequestAttributes.SCOPE_SESSION);
+		if (object == null) {
+			UserInfo annotation = parameter.getParameterAnnotation(UserInfo.class);
+			if (annotation != null && annotation.required()) {//必须不为空则抛异常
+				throw new UserNotLoginException("用户未登录");
+			}
+		}
+		return object;
     }
 
 }

@@ -3,7 +3,6 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 		  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
-
 	<display-name>security web app示例</display-name>
 	<!-- Spring配置文件开始 -->
 	<context-param>
@@ -51,7 +50,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>springmvc</servlet-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 	
 	<!-- 以下3项参数与log4j的配置相关 -->  

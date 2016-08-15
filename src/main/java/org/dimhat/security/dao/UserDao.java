@@ -12,10 +12,15 @@ public interface UserDao {
 
     User save(User user);
 
-    User update(User user);
+	int update(User user);
 
     void delete(Long id);
 
+	/**
+	 * 找到用户通过id，如果不存在则出现EmptyResultDataAccessException
+	 * @param id
+	 * @return 找到的对象
+	 */
     User findUserById(Long id);
 
     User findUserByUsername(String username);

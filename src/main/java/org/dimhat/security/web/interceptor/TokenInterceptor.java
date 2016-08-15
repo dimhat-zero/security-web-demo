@@ -28,6 +28,8 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
 	private static final Logger logger = Logger.getLogger(TokenInterceptor.class);
 
+	private static final String tokenName = "token";
+
 	/** 
 	 * 解决 重复提交的表单 和 CSRF
 	 */
@@ -40,15 +42,18 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 			if (annotation != null) {
 				//create
 				if (annotation.create()) {
-					request.getSession(true).setAttribute("token", UUID.randomUUID().toString());
+					String token = UUID.randomUUID().toString();
+					request.getSession(true).setAttribute(tokenName, token);
+					logger.debug("create token [" + token + "]");
 				}
 				//remove
 				if (annotation.remove()) {
-					if (!checkToken(request)) {//拒绝请求
+					if (!equalToken(request)) {//token不相同，拒绝请求
 						logger.warn("Request be refused with incorrect token verify, Url:" + request.getServletPath());
 						return false;
 					}
-					request.getSession(true).removeAttribute("token");
+					request.getSession(true).removeAttribute(tokenName);
+					logger.debug("remove token");
 				}
 			}
 		}
@@ -60,19 +65,14 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 	 * @param request
 	 * @return  
 	 */
-	private boolean checkToken(HttpServletRequest request) {
+	private boolean equalToken(HttpServletRequest request) {
 		String serverToken = (String) request.getSession(true).getAttribute("token");
-		if (serverToken == null) {
-			return false;
+		String clientToken = request.getParameter(tokenName);
+		logger.debug("service token [" + serverToken + "] and client token [" + clientToken + "]");
+		if (serverToken != null && clientToken != null && serverToken.equals(clientToken)) {
+			return true;
 		}
-		String clinetToken = request.getParameter("token");
-		if (clinetToken == null) {
-			return false;
-		}
-		if (!serverToken.equals(clinetToken)) {
-			return false;
-		}
-		return true;
+		return false;
 	}
 
 }

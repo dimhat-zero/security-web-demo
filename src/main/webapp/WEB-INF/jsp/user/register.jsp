@@ -9,7 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head>
 <base href="<%=basePath%>">
 
-<title>用户信息修改</title>
+<title>注册</title>
 
 <!-- 新 Bootstrap 核心 CSS 文件 -->
 <link rel="stylesheet"
@@ -25,27 +25,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <body>
 	<div style="width:900px;margin-left: auto;margin-right: auto;">
-		<h1>用户信息修改</h1>
+		<h1>注册账号</h1>
 		<!-- 默认escapeXml="true"，防xss -->
 		<c:out value="${msg }"></c:out>
 		<form action="" method="post" class="form-horizontal">
-			<input type="hidden" name="token" value="${token }" />
 			<div class="form-group">
 				<label class="col-sm-2 control-label">账号：</label>
 				<div class="col-sm-4">
-					<input class="form-control" type="text" name="username" value="${user.username }" readonly
+					<input class="form-control" type="text" name="username"
 						placeholder="账号" />
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label">昵称：</label>
+				<label class="col-sm-2 control-label">密码：</label>
 				<div class="col-sm-4">
-					<input class="form-control" type="text" name="nickName" value="<c:out value="${user.nickName }" />"/>
+					<input class="form-control" type="password" name="password" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">验证码：</label>
+				<div class="col-sm-2">
+					<input class="form-control" type="text" name="veriCode" />
+				</div>
+				<div class="col-sm-2">
+					<img width="120" height="34" src="/veriCode" />
 				</div>
 			</div>
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
-					<button type="submit">修改</button>
+					<button type="submit">注册</button>
 				</div>
 		</form>
 	</div>
