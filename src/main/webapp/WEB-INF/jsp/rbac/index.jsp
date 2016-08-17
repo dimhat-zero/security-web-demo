@@ -8,9 +8,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>$Title$</title>
+    <title>RBAC权限控制</title>
 </head>
 <body>
-$END$
+
+<a href="role">角色管理</a>
+<a href="perm">权限管理</a>
+<a href="user">用户授权</a>
+
 </body>
 </html>

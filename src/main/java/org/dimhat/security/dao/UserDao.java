@@ -2,6 +2,8 @@ package org.dimhat.security.dao;
 
 import org.dimhat.security.entity.User;
 
+import java.util.List;
+
 /**
  * 用户接口
  * @author dimhat
@@ -21,8 +23,9 @@ public interface UserDao {
 	 * @param id
 	 * @return 找到的对象
 	 */
-    User findUserById(Long id);
+    User findById(Long id);
 
-    User findUserByUsername(String username);
+    User findByUsername(String username);
 
+    List<User> findAll();
 }

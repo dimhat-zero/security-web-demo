@@ -9,6 +9,7 @@ import org.dimhat.security.entity.User;
 import org.dimhat.security.exception.AccountNotFindException;
 import org.dimhat.security.exception.PasswordIncorrectException;
 import org.dimhat.security.model.UserInfoModel;
+import org.dimhat.security.service.AuthorizeService;
 import org.dimhat.security.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.alibaba.fastjson.JSON;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Controller
 public class LoginController {
 
@@ -28,6 +32,8 @@ public class LoginController {
 
 	@Autowired
 	private UserService userService;
+    @Autowired
+    private AuthorizeService authorizeService;
 
 	//使用验真码
 	@RequestMapping(value = "login", method = RequestMethod.GET)
@@ -36,6 +42,12 @@ public class LoginController {
 			model.addAttribute("veriCode", true);
 		}
 		return "user/login";
+	}
+
+	@RequestMapping(value="logout",method=RequestMethod.POST)
+	public String logout(HttpServletRequest request){
+		request.getSession().removeAttribute(Constant.userInfo);
+		return "redirect:/login";
 	}
 
 	@RequestMapping(value = "login", method = RequestMethod.POST)
@@ -91,6 +103,13 @@ public class LoginController {
 
 	private UserInfoModel buildUserInfo(User user) {
 		UserInfoModel userInfo = new UserInfoModel();
+        //test
+        Set<String> role = new HashSet<>();
+        role.add("admin");
+        userInfo.setRoles(role);
+        userInfo.setPerms(role);
+        //userInfo.setRoles(authorizeService.findRoles(user.getId()));
+        //userInfo.setPerms(authorizeService.findPerms(user.getId()));
 		BeanUtils.copyProperties(user, userInfo);
 		return userInfo;
 	}

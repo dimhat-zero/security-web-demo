@@ -1,7 +1,18 @@
 package org.dimhat.security.exception;
 
 /**
- * Created by think on 2016/8/17.
+ * 不支持的逻辑类型异常
  */
-public class NotSupportLogicalTypeException {
+public class NotSupportLogicalTypeException extends ServiceException{
+
+    public NotSupportLogicalTypeException() {
+    }
+
+    public NotSupportLogicalTypeException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public NotSupportLogicalTypeException(String message) {
+        super(message);
+    }
 }

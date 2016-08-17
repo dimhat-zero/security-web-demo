@@ -1,15 +1,58 @@
 package org.dimhat.security.service;
 
+import org.dimhat.security.dao.PermDao;
+import org.dimhat.security.entity.Permission;
+import org.dimhat.security.util.IDUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Created by think on 2016/8/17.
+ * 权限服务实现类
  */
-public class PermServiceImpl {
-    private static PermServiceImpl ourInstance = new PermServiceImpl();
+@Service
+@Transactional
+public class PermServiceImpl implements PermService{
 
-    public static PermServiceImpl getInstance() {
-        return ourInstance;
+    @Autowired
+    private PermDao permDao;
+
+    @Override
+    public Permission add(Permission permission) {
+        return permDao.save(permission);
     }
 
-    private PermServiceImpl() {
+    @Override
+    public void delete(Long id) {
+        permDao.delete(id);
     }
+
+    @Override
+    public void update(Permission permission) {
+        permDao.update(permission);
+    }
+
+    @Override
+    public Permission findPermissionById(Long id){
+        return permDao.findById(id);
+    }
+
+    @Override
+    public List<Permission> findPermissionsByIds(List<Long> ids) {
+        List<Permission> result = new ArrayList<>(ids.size());
+        for(Long id : ids){
+            result.add(permDao.findById(id));
+        }
+        return result;
+    }
+
+    @Override
+    public List<Permission> findPermissionsByIds(String ids) {
+        List<Long> idList = IDUtil.parseIds(ids);
+        return findPermissionsByIds(idList);
+    }
+
 }

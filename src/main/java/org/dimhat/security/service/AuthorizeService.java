@@ -1,7 +1,19 @@
 package org.dimhat.security.service;
 
+import java.util.Set;
+
 /**
- * Created by think on 2016/8/17.
+ * 授权服务
  */
 public interface AuthorizeService {
+
+    void addUserRole(Long userId,Long roleId);
+
+    void deleteUserRole(Long id);
+
+    //find user's all roles str
+    Set<String> findRoles(Long userId);
+
+    //find user's all perms str
+    Set<String> findPerms(Long userId);
 }

@@ -2,16 +2,18 @@ package org.dimhat.security.exception;
 
 public class UserNotLoginException extends ServiceException {
 
+	private String redirectUrl;
+
 	public UserNotLoginException() {
 		super();
 	}
 
-	public UserNotLoginException(String message, Throwable cause) {
-		super(message, cause);
+	public UserNotLoginException(String redirectUrl){
+		super();
+		this.redirectUrl=redirectUrl;
 	}
 
-	public UserNotLoginException(String message) {
-		super(message);
+	public String getRedirectUrl() {
+		return redirectUrl;
 	}
-
 }

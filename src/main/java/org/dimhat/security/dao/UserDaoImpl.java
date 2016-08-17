@@ -70,20 +70,20 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	/** 
-	 * @see org.dimhat.security.dao.UserDao#findUserById(java.lang.Long)
+	 * @see org.dimhat.security.dao.UserDao#findById(java.lang.Long)
 	 */
 	@Override
-	public User findUserById(Long id) {
+	public User findById(Long id) {
 		String sql = "select * from sys_user where id = ?";
 		User user = jdbcTemplate.queryForObject(sql, new UserRowMapper(), id);
 		return user;
 	}
 
 	/** 
-	 * @see org.dimhat.security.dao.UserDao#findUserByUsername(java.lang.String)
+	 * @see org.dimhat.security.dao.UserDao#findByUsername(java.lang.String)
 	 */
 	@Override
-	public User findUserByUsername(String username) {
+	public User findByUsername(String username) {
 		String sql = "select * from sys_user where username=?";
 		List<User> users = jdbcTemplate.query(sql, new UserRowMapper(), username);
 		if (users.size() == 0)
@@ -91,4 +91,10 @@ public class UserDaoImpl implements UserDao {
 		return users.get(0);
 	}
 
+	@Override
+	public List<User> findAll() {
+		String sql="select * from sys_user";
+		List<User> list = jdbcTemplate.query(sql, new UserRowMapper());
+		return list;
+	}
 }

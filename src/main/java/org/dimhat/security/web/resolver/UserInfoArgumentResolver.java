@@ -40,7 +40,7 @@ public class UserInfoArgumentResolver implements HandlerMethodArgumentResolver {
 		if (object == null) {
 			UserInfo annotation = parameter.getParameterAnnotation(UserInfo.class);
 			if (annotation != null && annotation.required()) {//必须不为空则抛异常
-				throw new UserNotLoginException("用户未登录");
+				throw new UserNotLoginException();
 			}
 		}
 		return object;

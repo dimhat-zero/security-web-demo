@@ -3,6 +3,8 @@ package org.dimhat.security.service;
 import org.dimhat.security.entity.User;
 import org.dimhat.security.model.UserUpdateForm;
 
+import java.util.List;
+
 /**
  * 用户服务接口
  * @author dimhat
@@ -18,4 +20,6 @@ public interface UserService {
 	User getUserById(Long id);
 
 	void update(UserUpdateForm form);
+
+    List<User> findAll();
 }

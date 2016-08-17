@@ -23,7 +23,7 @@ public class XssDemoController {
 
 	/**
 	 * 存取评论到数据库
-	 * 这里为了简单存到属性中
+	 * 这里为了简单存到属性中(并发会出错）
 	 */
 	@RequestMapping("commit")
 	public String commit(Model model,String commit,Boolean safe){

@@ -4,9 +4,38 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>首页</title>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet"
+          href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <!-- add jquery-ui -->
+    <link rel="stylesheet" href="/static/jquery-ui-1.12.0/jquery-ui.min.css" >
+    <script type="application/javascript" src="/static/jquery-ui-1.12.0/jquery-ui.min.js"></script>
 </head>
 <body>
-hello world
+<h1>首页</h1>
+<div><form action="/logout" method="post"><button type="submit">退出登录</button></form></div>
+<div id="dialog_show"  title="基本的对话框">
+    <form action="/user/home" class="form-horizontal">
+        <label class="control-label col-sm-3">姓名</label>
+        <div class="col-sm-9"><input class="form-control" type="text" name="name"/></div>
+        <label class="control-label col-sm-3">邮箱</label>
+        <div class="col-sm-9"><input class="form-control" type="text" name="email"/></div>
+        <button>个人主页</button>
+    </form>
+</div>
+<script type="application/javascript">
+$(function () {
+    $("#dialog_show").dialog();
+});
+
+</script>
 </body>
 </html>

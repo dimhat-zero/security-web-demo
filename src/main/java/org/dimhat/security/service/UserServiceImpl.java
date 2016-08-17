@@ -2,6 +2,7 @@ package org.dimhat.security.service;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.dimhat.security.dao.UserDao;
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UserServiceImpl implements UserService {
 
+
     @Autowired
     private UserDao userDao;
 
@@ -35,7 +37,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User register(User user) {
 		//validate username
-		User dbUser = userDao.findUserByUsername(user.getUsername());
+		User dbUser = userDao.findByUsername(user.getUsername());
 		if (dbUser != null) {
 			throw new UsernameExistException("用户名[" + dbUser.getUsername() + "]已存在");
 		}
@@ -59,7 +61,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User login(User user) {
 
-        User tuser = userDao.findUserByUsername(user.getUsername());
+        User tuser = userDao.findByUsername(user.getUsername());
         if (tuser == null) {
 			throw new AccountNotFindException("找不到用户名");
         }
@@ -74,14 +76,18 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User getUserById(Long id) {
-		return userDao.findUserById(id);
+		return userDao.findById(id);
 	}
 
 	@Override
 	public void update(UserUpdateForm form) {
-		User dbUser = userDao.findUserById(form.getId());
+		User dbUser = userDao.findById(form.getId());
 		BeanUtils.copyProperties(form, dbUser);
 		userDao.update(dbUser);
 	}
 
+    @Override
+    public List<User> findAll() {
+        return userDao.findAll();
+    }
 }
