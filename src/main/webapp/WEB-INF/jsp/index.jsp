@@ -22,6 +22,8 @@
 <body>
 <h1>首页</h1>
 <div><form action="/logout" method="post"><button type="submit">退出登录</button></form></div>
+<div><a href="/rbac">权限</a></div>
+<div><button id="rbacBtn">角色ajax</button></div>
 <div id="dialog_show"  title="基本的对话框">
     <form action="/user/home" class="form-horizontal">
         <label class="control-label col-sm-3">姓名</label>
@@ -34,6 +36,21 @@
 <script type="application/javascript">
 $(function () {
     $("#dialog_show").dialog();
+
+    $("#rbacBtn").click(function(){
+        $.get("/rbac/role",function(data){
+           console.log(data);
+            if(data && data.success){
+                console.log("success");
+            }else{
+                if(data.code=="${exceptionCode.notLoginCode}"){
+                    alert("未登录，弹出登录框");
+                }else{
+                    alert("未识别的异常："+data.msg);
+                }
+            }
+        });
+    })
 });
 
 </script>

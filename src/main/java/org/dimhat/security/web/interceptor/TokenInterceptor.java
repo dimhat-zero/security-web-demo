@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.dimhat.security.exception.TokenExpiredException;
 import org.dimhat.security.web.annotation.Token;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  * token 验证规则：
  * 	进入表单页面时创建token
  * 	提交表单时消耗token
+ * 	如果token不正确，则拒绝请求。没有提示
  * </pre>
  * @author dimhat
  * @date 2016年8月12日 下午2:50:37
@@ -49,8 +51,9 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 				//remove
 				if (annotation.remove()) {
 					if (!equalToken(request)) {//token不相同，拒绝请求
-						logger.warn("Request be refused with incorrect token verify, Url:" + request.getServletPath());
-						return false;
+						logger.warn("Request be refused with incorrect token verify, Url[" + request.getRequestURI()+"]");
+                        throw new TokenExpiredException("页面过期，请刷新页面");
+						//return false;
 					}
 					request.getSession(true).removeAttribute(tokenName);
 					logger.debug("remove token");

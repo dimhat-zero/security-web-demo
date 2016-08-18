@@ -123,12 +123,12 @@ public class LoginController {
 	boolean needVeriCode(HttpServletRequest request) {//判断是否要验证码
 		HttpSession session = request.getSession(true);
 		Integer loginTime = (Integer) session.getAttribute(Constant.loginTime);
-		logger.debug("current login error times [" + loginTime + "] ; max error times[" + Constant.limitLoginTime
+		logger.debug("当前登录错误次数[" + loginTime + "]，最大登录错误次数[" + Constant.limitLoginTime
 				+ "] ");
 		if (loginTime == null || loginTime <= Constant.limitLoginTime) {
 			return false;
 		}
-		logger.warn("login error times is to mush,it will have vericode");
+		logger.warn("登录次数太多，再次登录需要验证码");
 		return true;
 	}
 
@@ -138,13 +138,13 @@ public class LoginController {
 		if (loginTime == null)
 			loginTime = 0;
 		session.setAttribute(Constant.loginTime, loginTime + 1);
-		logger.debug("login time plus 1");
+		logger.debug("登录出错次数+1");
 	}
 
 	void loginTimeRemove(HttpServletRequest request) {//移除出错请求
 		HttpSession session = request.getSession(true);
 		session.removeAttribute(Constant.loginTime);
-		logger.debug("login time remove");
+		logger.debug("登录出错次数移除");
 	}
 
 }

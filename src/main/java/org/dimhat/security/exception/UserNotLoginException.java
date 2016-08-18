@@ -6,11 +6,13 @@ public class UserNotLoginException extends ServiceException {
 
 	public UserNotLoginException() {
 		super();
+		setCode(ExceptionCode.NOT_LOGIN_CODE);
 	}
 
 	public UserNotLoginException(String redirectUrl){
 		super();
 		this.redirectUrl=redirectUrl;
+		setCode(ExceptionCode.NOT_LOGIN_CODE);
 	}
 
 	public String getRedirectUrl() {
