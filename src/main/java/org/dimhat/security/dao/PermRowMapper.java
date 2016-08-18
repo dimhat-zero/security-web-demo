@@ -1,6 +1,6 @@
 package org.dimhat.security.dao;
 
-import org.dimhat.security.entity.Permission;
+import org.dimhat.security.entity.Perm;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -9,10 +9,10 @@ import java.sql.SQLException;
 /**
  * Created by think on 2016/8/17.
  */
-public class PermRowMapper  implements RowMapper<Permission> {
+public class PermRowMapper  implements RowMapper<Perm> {
     @Override
-    public Permission mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Permission perm = new Permission();
+    public Perm mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Perm perm = new Perm();
         perm.setId(rs.getLong("id"));
         perm.setDeleted(rs.getBoolean("is_deleted"));
         perm.setDescription(rs.getString("description"));

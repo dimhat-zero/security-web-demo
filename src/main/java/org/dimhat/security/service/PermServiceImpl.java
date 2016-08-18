@@ -1,7 +1,7 @@
 package org.dimhat.security.service;
 
 import org.dimhat.security.dao.PermDao;
-import org.dimhat.security.entity.Permission;
+import org.dimhat.security.entity.Perm;
 import org.dimhat.security.util.IDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,8 +21,8 @@ public class PermServiceImpl implements PermService{
     private PermDao permDao;
 
     @Override
-    public Permission add(Permission permission) {
-        return permDao.save(permission);
+    public Perm add(Perm perm) {
+        return permDao.save(perm);
     }
 
     @Override
@@ -31,18 +31,18 @@ public class PermServiceImpl implements PermService{
     }
 
     @Override
-    public void update(Permission permission) {
-        permDao.update(permission);
+    public void update(Perm perm) {
+        permDao.update(perm);
     }
 
     @Override
-    public Permission findPermissionById(Long id){
+    public Perm findPermissionById(Long id){
         return permDao.findById(id);
     }
 
     @Override
-    public List<Permission> findPermissionsByIds(List<Long> ids) {
-        List<Permission> result = new ArrayList<>(ids.size());
+    public List<Perm> findPermissionsByIds(List<Long> ids) {
+        List<Perm> result = new ArrayList<>(ids.size());
         for(Long id : ids){
             result.add(permDao.findById(id));
         }
@@ -50,7 +50,7 @@ public class PermServiceImpl implements PermService{
     }
 
     @Override
-    public List<Permission> findPermissionsByIds(String ids) {
+    public List<Perm> findPermissionsByIds(String ids) {
         List<Long> idList = IDUtil.parseIds(ids);
         return findPermissionsByIds(idList);
     }

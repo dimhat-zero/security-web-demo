@@ -1,6 +1,6 @@
 package org.dimhat.security.dao;
 
-import org.dimhat.security.entity.Permission;
+import org.dimhat.security.entity.Perm;
 
 import java.util.List;
 
@@ -9,13 +9,13 @@ import java.util.List;
  */
 public interface PermDao {
 
-    Permission save(Permission perm);
+    Perm save(Perm perm);
 
     int delete(Long id);
 
-    int update(Permission perm);
+    int update(Perm perm);
 
-    Permission findById(Long id);
+    Perm findById(Long id);
 
-    List<Permission> findAll();
+    List<Perm> findAll();
 }

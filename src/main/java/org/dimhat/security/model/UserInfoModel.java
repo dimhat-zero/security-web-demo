@@ -1,5 +1,7 @@
 package org.dimhat.security.model;
 
+import org.dimhat.security.authz.AuthorizationInfo;
+
 import java.util.Set;
 
 /**
@@ -8,7 +10,7 @@ import java.util.Set;
  * @date 2016年8月15日 下午4:23:30
  * @version 1.0
  */
-public class UserInfoModel {
+public class UserInfoModel implements AuthorizationInfo {
 
 	private Long id;
 

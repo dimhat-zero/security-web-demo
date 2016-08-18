@@ -1,20 +1,20 @@
 package org.dimhat.security.service;
 
 
-import org.dimhat.security.entity.Permission;
+import org.dimhat.security.entity.Perm;
 
 import java.util.List;
 
 public interface PermService {
 
-    Permission add(Permission permission);
+    Perm add(Perm perm);
 
     void delete(Long id);
 
-    void update(Permission permission);
+    void update(Perm perm);
 
-    Permission findPermissionById(Long id);
+    Perm findPermissionById(Long id);
 
-    List<Permission> findPermissionsByIds(List<Long> ids);
-    List<Permission> findPermissionsByIds(String ids);
+    List<Perm> findPermissionsByIds(List<Long> ids);
+    List<Perm> findPermissionsByIds(String ids);
 }

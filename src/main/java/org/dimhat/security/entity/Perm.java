@@ -1,7 +1,7 @@
 package org.dimhat.security.entity;
 
 
-public class Permission {
+public class Perm {
     private Long id;
     private String permission;//权限字符串 a:b形式
     private String description;//描述

@@ -1,11 +1,10 @@
 package org.dimhat.security.dao;
 
-import org.dimhat.security.entity.Permission;
+import org.dimhat.security.entity.Perm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -22,7 +21,7 @@ public class PermDaoImpl implements PermDao {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public Permission save(final Permission perm) {
+    public Perm save(final Perm perm) {
         final String sql="insert into sys_perm(permission,description,is_deleted,is_menu,parent_id,rank,sub_rank_seq) values(?,?,?,?,?,?,?)";
         GeneratedKeyHolder keyHolder=new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
@@ -51,22 +50,22 @@ public class PermDaoImpl implements PermDao {
     }
 
     @Override
-    public int update(Permission perm) {
+    public int update(Perm perm) {
         String sql="update sys_perm set permission=?,description=?,is_deleted=?,is_menu=?,parent_id=?,rank=?,sub_rank_seq=? where id=?";
         return jdbcTemplate.update(sql,perm.getPermission(),perm.getDescription(),perm.getDeleted(),perm.getMenu(),perm.getParentId(),perm.getRank(),perm.getSubRankSeq(),perm.getId());
     }
 
     @Override
-    public Permission findById(Long id) {
+    public Perm findById(Long id) {
         String sql="select * from sys_perm where id = ?";
-        Permission permission = jdbcTemplate.queryForObject(sql, new PermRowMapper(), id);//if not find will throw exception
-        return permission;
+        Perm perm = jdbcTemplate.queryForObject(sql, new PermRowMapper(), id);//if not find will throw exception
+        return perm;
     }
 
     @Override
-    public List<Permission> findAll() {
+    public List<Perm> findAll() {
         String sql="select * from sys_perm";
-        List<Permission> list = jdbcTemplate.query(sql, new PermRowMapper());
+        List<Perm> list = jdbcTemplate.query(sql, new PermRowMapper());
         return list;
     }
 }

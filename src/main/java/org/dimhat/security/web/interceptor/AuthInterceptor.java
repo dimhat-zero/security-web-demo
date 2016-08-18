@@ -3,6 +3,7 @@ package org.dimhat.security.web.interceptor;
 import com.alibaba.fastjson.JSON;
 import org.apache.log4j.Logger;
 import org.dimhat.security.Constant;
+import org.dimhat.security.authz.AuthorizingRealm;
 import org.dimhat.security.exception.NotSupportLogicalTypeException;
 import org.dimhat.security.exception.UnauthorizeException;
 import org.dimhat.security.exception.UserNotLoginException;
@@ -69,9 +70,10 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                 validateRole(requestURI,userInfo,requireRole);
                 logger.debug("路径["+requestURI+"]验证role通过");
             }
-            //验证权限
+            //验证权限（通配）
             if(requirePerm!=null){
-                validatePerm(requestURI,userInfo,requirePerm);
+                //validatePerm(requestURI,userInfo,requirePerm);
+                validateWildcardPerm(requestURI,userInfo,requirePerm);
                 logger.debug("路径["+requestURI+"]验证perm通过");
             }
             logger.debug("路径["+requestURI+"]验证授权通过");
@@ -104,6 +106,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         throw new NotSupportLogicalTypeException("不支持的逻辑类型");
     }
 
+
     //验证权限
     private void validatePerm(String requestURI,UserInfoModel userInfo,RequirePerm requirePerm) {
         String[] needPerms = requirePerm.value();
@@ -126,4 +129,30 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         }
         throw new NotSupportLogicalTypeException("不支持的逻辑类型");
     }
+
+    //授权验证实体
+    private AuthorizingRealm authorizingRealm = new AuthorizingRealm();
+    //验证通配权限
+    private void validateWildcardPerm(String requestURI,UserInfoModel userInfo,RequirePerm requirePerm) {
+        String[] needPerms = requirePerm.value();
+        Logical logical = requirePerm.logical();
+        logger.debug("需要权限"+JSON.toJSONString(needPerms)+"，逻辑运算："+JSON.toJSONString(logical));
+        Set<String> perms = userInfo.getPerms();
+        logger.debug("用户已有权限"+JSON.toJSONString(perms));
+        if(logical==Logical.AND){
+            for(String needPerm : needPerms){
+                if(!authorizingRealm.isPermitted(needPerm,userInfo)){
+                    throw new UnauthorizeException("未授权的访问，请求路径["+requestURI+"]需要权限["+needPerm+"]");
+                }
+            }
+            return;
+        }else if(logical==Logical.OR){
+            for(String needPerm : needPerms){
+                if(perms.contains(needPerm)) return;
+            }
+            throw new UnauthorizeException("未授权的访问，请求路径["+requestURI+"]需要任一权限"+JSON.toJSONString(needPerms)+"");
+        }
+        throw new NotSupportLogicalTypeException("不支持的逻辑类型");
+    }
+
 }
