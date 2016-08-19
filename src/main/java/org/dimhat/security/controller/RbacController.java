@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @RequestMapping("rbac")
 @Controller
+@RequireRole("rbac")
 public class RbacController {
 
     @Autowired
@@ -45,5 +46,10 @@ public class RbacController {
     @RequirePerm(value={"role:update","role:create"},logical = Logical.AND)
     public String perm(){
         return "rbac/perm";
+    }
+
+    @RequestMapping(value="clazz",method = RequestMethod.GET)
+    public String clazz(){
+        return "rbac/clazz";
     }
 }

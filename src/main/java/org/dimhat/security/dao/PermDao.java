@@ -15,6 +15,12 @@ public interface PermDao {
 
     int update(Perm perm);
 
+    /**
+     * 根据id查询权限
+     * 如果找不到或找到多个会抛出DataAccessException异常
+     * @param id
+     * @return
+     */
     Perm findById(Long id);
 
     List<Perm> findAll();
