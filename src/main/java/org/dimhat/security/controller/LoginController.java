@@ -82,12 +82,12 @@ public class LoginController {
 			ra.addFlashAttribute("msg", "找不到用户名");
 			ra.addFlashAttribute("code", 1);
 			loginTimePlus(request);
-			return "redirect:login";
+			return "redirect:login?redirectUrl="+redirectUrl;
 		} catch (PasswordIncorrectException pie) {
 			ra.addFlashAttribute("msg", "密码不正确");
 			ra.addFlashAttribute("code", 2);
 			loginTimePlus(request);
-			return "redirect:login";
+			return "redirect:login?redirectUrl"+redirectUrl;
 		}
 
 		UserInfoModel userInfo = buildUserInfo(user);

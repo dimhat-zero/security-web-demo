@@ -5,7 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
 import org.dimhat.security.dao.UserDao;
+import org.dimhat.security.entity.Role;
 import org.dimhat.security.entity.User;
 import org.dimhat.security.exception.AccountNotFindException;
 import org.dimhat.security.exception.PasswordIncorrectException;
@@ -14,8 +16,11 @@ import org.dimhat.security.model.UserUpdateForm;
 import org.dimhat.security.util.MD5Util;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.PostConstruct;
 
 /**
  * 用户服务类
@@ -27,11 +32,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UserServiceImpl implements UserService {
 
+    private static final Logger logger= Logger.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserDao userDao;
 
-    /** 
+    /**
      * @see org.dimhat.security.service.UserService#register(org.dimhat.security.entity.User)
      */
     @Override

@@ -4,7 +4,7 @@ public class Role {
     private Long id;
     private String roleName;//角色名称
     private String description;//角色描述
-    private Boolean isDeleted;//是否删除
+    private Boolean isDeleted=false;//是否删除
 
     public String getDescription() {
         return description;

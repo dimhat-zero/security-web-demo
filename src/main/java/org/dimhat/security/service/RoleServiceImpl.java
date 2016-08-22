@@ -9,14 +9,17 @@ import org.dimhat.security.model.RoleUpdateForm;
 import org.dimhat.security.util.IDUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 角色服务
+ * 默认会创建一个id=1,admin的角色
  */
 @Service
 @Transactional

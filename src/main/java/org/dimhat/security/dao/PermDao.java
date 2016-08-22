@@ -24,4 +24,6 @@ public interface PermDao {
     Perm findById(Long id);
 
     List<Perm> findAll();
+
+    Perm findByPerm(String s);
 }

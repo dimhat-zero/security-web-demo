@@ -23,14 +23,14 @@ public class RoleDaoImpl implements RoleDao {
 
     @Override
     public Role save(final Role role) {
-        final String sql="insert into sys_role(role_name,descripton,is_deleted)";
+        final String sql="insert into sys_role(role_name,description,is_deleted) values(?,?,?)";
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                PreparedStatement ps = con.prepareStatement(sql);
-                int index=0;
+                PreparedStatement ps = con.prepareStatement(sql,new String[]{"id"});
+                int index=1;
                 ps.setString(index++,role.getRoleName());
                 ps.setString(index++,role.getDescription());
                 ps.setBoolean(index++,role.getDeleted());
@@ -65,5 +65,12 @@ public class RoleDaoImpl implements RoleDao {
         String sql="select * from sys_role";
         List<Role> list = jdbcTemplate.query(sql, new RoleRowMapper());
         return list;
+    }
+
+    @Override
+    public Role findByRole(String s) {
+        String sql="select * from sys_role where role_name=?";
+        Role role = jdbcTemplate.queryForObject(sql, new RoleRowMapper(), s);
+        return role;
     }
 }

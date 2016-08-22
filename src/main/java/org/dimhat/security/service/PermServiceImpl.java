@@ -17,6 +17,7 @@ import java.util.List;
 
 /**
  * 权限服务实现类
+ * 默认会创建一个id=1,匹配*的权限
  */
 @Service
 @Transactional
@@ -24,24 +25,6 @@ public class PermServiceImpl implements PermService{
 
     @Autowired
     private PermDao permDao;
-
-    @PostConstruct
-    public void init(){
-        //创建根节点
-        try {
-            //权限根节点的id是1
-            Perm perm = permDao.findById(1L);
-        }catch (DataAccessException de){
-            PermUpdateForm form = new PermUpdateForm();
-            form.setId(1L);
-            form.setPermission("*");
-            form.setDescription("权限根节点");
-            form.setMenu(true);
-            //parent id is null;
-            Perm perm = trans(form);
-            permDao.save(perm);
-        }
-    }
 
     //将form转换成perm实体
     private Perm trans(PermUpdateForm form){
@@ -97,10 +80,30 @@ public class PermServiceImpl implements PermService{
     }
 
     @Override
+    public List<Perm> findAll() {
+        return permDao.findAll();
+    }
+
+    @Override
     public void fakeDelete(Long id) {
         Perm perm = permDao.findById(id);
         perm.setDeleted(true);
         permDao.update(perm);
+    }
+
+    @Override
+    public void shiftup(Long id) {
+        //find pre
+        String sql="select * from sys_perm where id < ? order by id desc limit 1";
+        
+        //swap rank
+    }
+
+    @Override
+    public void shiftdown(Long id) {
+        //find next
+        String sql="select * from sys_perm where id > ? order by id asc limit 1";
+        //swap rank
     }
 
 }

@@ -68,4 +68,11 @@ public class PermDaoImpl implements PermDao {
         List<Perm> list = jdbcTemplate.query(sql, new PermRowMapper());
         return list;
     }
+
+    @Override
+    public Perm findByPerm(String s) {
+        String sql="select * from sys_perm where permission = ?";
+        Perm perm =  jdbcTemplate.queryForObject(sql,new PermRowMapper(),s);
+        return perm;
+    }
 }

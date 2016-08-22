@@ -1,13 +1,13 @@
 package org.dimhat.security.entity;
 
-
 public class Perm {
     private Long id;
+
     private String permission;//权限字符串 a:b形式
     private String description;//描述
-    private Boolean isDeleted;//是否删除
+    private Boolean isDeleted=false;//是否删除
 
-    private Boolean isMenu;//是否是菜单
+    private Boolean isMenu=true;//是否是菜单
     private Long parentId;//父节点id
     private Integer rank;//排序
     private Integer subRankSeq=0;//子序列排序递增

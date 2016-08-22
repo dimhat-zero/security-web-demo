@@ -55,4 +55,10 @@ public interface PermService {
      * @return 权限列表
      */
     List<Perm> findPermissionsByIds(String ids);
+
+    List<Perm> findAll();
+
+    void shiftup(Long id);
+
+    void shiftdown(Long id);
 }
