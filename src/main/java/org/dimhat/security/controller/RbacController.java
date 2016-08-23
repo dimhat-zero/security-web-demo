@@ -45,11 +45,4 @@ public class RbacController {
         return "rbac/role";
     }
 
-    @RequestMapping(value="perm",method = RequestMethod.GET)
-    public String perm(Model model){
-        List<Perm> perms = permService.findAll();
-        model.addAttribute("perms",perms);
-        return "rbac/perm";
-    }
-
 }

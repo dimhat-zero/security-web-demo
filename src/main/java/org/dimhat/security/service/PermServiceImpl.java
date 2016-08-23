@@ -6,12 +6,9 @@ import org.dimhat.security.model.PermUpdateForm;
 import org.dimhat.security.util.IDUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,27 +32,30 @@ public class PermServiceImpl implements PermService{
 
     private Integer getRankForParent(long parentId){
         if(parentId==0) return 0;//root rank is zero
-        Perm parentPerm = permDao.findById(parentId);
-        //select for udpate or plus 1，防止并发出错
-        return parentPerm.getSubRankSeq();
+        Perm parentPerm = permDao.findByIdForUpdate(parentId);
+        Integer nextRank = parentPerm.getSubRankSeq()+1;
+        parentPerm.setSubRankSeq(nextRank);
+        return nextRank;
     }
 
     @Override
     public Perm add(PermUpdateForm form) {
         Perm perm = trans(form);
         perm.setRank(getRankForParent(perm.getParentId()));
-        //get rank from parent s
         return permDao.save(perm);
     }
 
     @Override
     public void delete(Long id) {
+        String sql="delete from sys_perm where parent_id = "+id;
+        permDao.executeSQL(sql);
         permDao.delete(id);
     }
 
     @Override
     public void update(PermUpdateForm form) {
-        Perm perm = trans(form);
+        Perm perm = permDao.findById(form.getId());
+        BeanUtils.copyProperties(form,perm);
         permDao.update(perm);
     }
 
@@ -80,8 +80,8 @@ public class PermServiceImpl implements PermService{
     }
 
     @Override
-    public List<Perm> findAll() {
-        return permDao.findAll();
+    public List<Perm> findAll(boolean isDeleted) {
+        return permDao.findAll(isDeleted);
     }
 
     @Override
@@ -93,9 +93,12 @@ public class PermServiceImpl implements PermService{
 
     @Override
     public void shiftup(Long id) {
-        //find pre
-        String sql="select * from sys_perm where id < ? order by id desc limit 1";
-        
+        //双向链表？ pre next
+        //find pre 事务开始前的前一个
+        String sql="select * from sys_perm where id < "+id+" order by id desc limit 1 for update";
+
+        //交换操作，如果 1 2 update 1 update 2, swap(3,2);
+
         //swap rank
     }
 

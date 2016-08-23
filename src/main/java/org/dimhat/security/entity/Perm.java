@@ -12,6 +12,10 @@ public class Perm {
     private Integer rank;//排序
     private Integer subRankSeq=0;//子序列排序递增
 
+    public Boolean isRoot(){
+        return parentId==0;
+    }
+
     public String getDescription() {
         return description;
     }

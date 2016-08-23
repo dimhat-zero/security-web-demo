@@ -11,6 +11,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <title>登录</title>
 <!-- 新 Bootstrap 核心 CSS 文件 -->
 <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/style.css">
 
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
 <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
@@ -19,11 +20,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div style="width:900px;margin-left: auto;margin-right: auto;">
+<div id="containtor">
 
-<form action="" method="post" class="form-horizontal">
 	<h1>登录</h1>
 	<c:out value="${msg }" />
+<form action="" method="post" class="form-horizontal">
+
 	<div class="form-group">
 		<label class="col-sm-2 control-label">账号：</label>
 		<div class="col-sm-4">

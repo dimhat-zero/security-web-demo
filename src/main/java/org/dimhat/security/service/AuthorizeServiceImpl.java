@@ -38,6 +38,10 @@ public class AuthorizeServiceImpl implements AuthorizeService {
     @Autowired
     private UserService userService;
 
+    /**
+     * 初始化数据库中的数据
+     * admin用户拥有admin角色拥有*权限
+     */
     @PostConstruct
     public void init(){
         //create perm
@@ -49,7 +53,7 @@ public class AuthorizeServiceImpl implements AuthorizeService {
             perm.setParentId(0L);
             perm.setRank(0);
             perm.setPermission("*");
-            perm.setDescription("权限根节点");
+            perm.setDescription("系统权限根节点");
             perm = permDao.save(perm);
         }
 

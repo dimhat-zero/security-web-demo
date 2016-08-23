@@ -63,9 +63,26 @@ public class PermDaoImpl implements PermDao {
     }
 
     @Override
-    public List<Perm> findAll() {
-        String sql="select * from sys_perm";
-        List<Perm> list = jdbcTemplate.query(sql, new PermRowMapper());
+    public Perm findByIdForUpdate(Long id) {
+        String sql="select * from sys_perm where id = ? for update";
+        Perm perm = jdbcTemplate.queryForObject(sql, new PermRowMapper(), id);//if not find will throw exception
+        return perm;
+    }
+
+    @Override
+    public List<Perm> findBySQL(String sql) {
+        return jdbcTemplate.query(sql,new PermRowMapper());
+    }
+
+    @Override
+    public void executeSQL(String sql) {
+        jdbcTemplate.execute(sql);
+    }
+
+    @Override
+    public List<Perm> findAll(boolean isDeleted) {
+        String sql="select * from sys_perm where is_deleted  = ?";
+        List<Perm> list = jdbcTemplate.query(sql, new PermRowMapper(),isDeleted);
         return list;
     }
 

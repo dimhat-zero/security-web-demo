@@ -12,9 +12,9 @@
 </head>
 <body>
 
-<a href="/rbac/role">角色管理</a>
-<a href="/rbac/perm">权限管理</a>
-<a href="/rbac/user">用户授权</a>
+<a href="/perm">权限管理</a>
+<a href="/role">角色管理</a>
+<a href="/user">用户授权</a>
 
 </body>
 </html>

@@ -23,7 +23,13 @@ public interface PermDao {
      */
     Perm findById(Long id);
 
-    List<Perm> findAll();
+    List<Perm> findAll(boolean isDeleted);
 
     Perm findByPerm(String s);
+
+    Perm findByIdForUpdate(Long id);
+
+    List<Perm> findBySQL(String sql);
+
+    void executeSQL(String sql);
 }

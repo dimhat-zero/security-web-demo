@@ -35,7 +35,12 @@ import java.util.Map;
 public class DefaultExceptionHandler {
 
 	private Logger logger=Logger.getLogger(DefaultExceptionHandler.class);
-	
+
+	/**
+	 * 处理未登录的异常
+	 * json -- success=false
+	 * html -- login页面
+	 */
 	@ExceptionHandler(UserNotLoginException.class)
 	public ModelAndView userNotLogin(HttpServletRequest request, UserNotLoginException e) {
 		logger.error("用户没有登录异常");
@@ -60,6 +65,11 @@ public class DefaultExceptionHandler {
 		return mav;
 	}
 
+	/**
+	 * 处理未授权的异常
+	 * json -- success=false
+	 * html -- unauthorize页面
+	 */
 	@ExceptionHandler(UnauthorizeException.class)
 	public ModelAndView unauthorize(HttpServletRequest request,
 									HttpServletResponse response, UnauthorizeException e){
@@ -84,15 +94,28 @@ public class DefaultExceptionHandler {
 	}
 
 	@ExceptionHandler(TokenExpiredException.class)
-	public ModelAndView tokenExpire(TokenExpiredException e){
+	public ModelAndView tokenExpire(HttpServletRequest request,TokenExpiredException e){
 		logger.error("token过期异常");
-		ModelAndView mav = new ModelAndView("exception");
-		mav.addObject("msg",e.getMessage());
-		return  mav;
+
+		ModelAndView mav=new ModelAndView();
+		if(AjaxUtil.isAjaxRequest(request)){
+			//ajax请求，返回json视图
+			MappingJacksonJsonView view = new MappingJacksonJsonView();
+			Map attributes = new HashMap();
+			attributes.put("success",false);
+			attributes.put("msg","token过期");
+			attributes.put("code",e.getCode());
+			view.setAttributesMap(attributes);
+			mav.setView(view);
+		}else{
+			mav.setViewName("exception");
+			mav.addObject("msg",e.getMessage());
+		}
+		return mav;
 	}
 	
-	@ExceptionHandler({ ServiceException.class })
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	//@ExceptionHandler({ ServiceException.class })
+	//@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public ModelAndView jianlaException(NativeWebRequest request, ServiceException e) {
 		logger.error("发生业务异常",e);
 		ModelAndView mv = new ModelAndView();
@@ -101,12 +124,23 @@ public class DefaultExceptionHandler {
 		return mv;
 	}
 	
-	//@ExceptionHandler({NullPointerException.class})
-	public ModelAndView nllPointerException(NativeWebRequest request, NullPointerException e){
-		logger.error("空指针异常",e);
-		ModelAndView mv = new ModelAndView();
-		mv.addObject("msg", e.getMessage());
-		mv.setViewName("exception");
-		return mv;
-	} 
+	//@ExceptionHandler({Exception.class})
+	public ModelAndView nullPointerException(HttpServletRequest request, Exception e){
+		logger.error("发生未知异常",e);
+		ModelAndView mav=new ModelAndView();
+		if(AjaxUtil.isAjaxRequest(request)){
+			//ajax请求，返回json视图
+			MappingJacksonJsonView view = new MappingJacksonJsonView();
+			Map attributes = new HashMap();
+			attributes.put("success",false);
+			attributes.put("msg",e.getMessage());
+			view.setAttributesMap(attributes);
+			mav.setView(view);
+		}else{
+			mav.setViewName("exception");
+			mav.addObject("msg",e.getMessage());
+		}
+		return mav;
+	}
+
 }
