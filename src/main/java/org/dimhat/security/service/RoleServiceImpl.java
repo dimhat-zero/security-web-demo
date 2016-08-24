@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSON;
 import org.apache.log4j.Logger;
 import org.dimhat.security.dao.RoleDao;
 import org.dimhat.security.dao.RolePermDao;
+import org.dimhat.security.entity.Perm;
 import org.dimhat.security.entity.Role;
+import org.dimhat.security.model.RoleModel;
 import org.dimhat.security.model.RoleUpdateForm;
 import org.dimhat.security.util.IDUtil;
 import org.springframework.beans.BeanUtils;
@@ -31,6 +33,8 @@ public class RoleServiceImpl implements RoleService {
     private RoleDao roleDao;
     @Autowired
     private RolePermDao rolePermDao;
+    @Autowired
+    private PermService permService;
 
     @Override
     public Role add(RoleUpdateForm form) {
@@ -78,6 +82,19 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public RoleModel findDetailById(Long id) {
+        Role role = findRoleById(id);
+        RoleModel roleModel = new RoleModel();
+        BeanUtils.copyProperties(role,roleModel);
+        //find perms
+
+        List<Long> ids = rolePermDao.findPermIdsByRoleId(role.getId());
+        List<Perm> list = permService.findPermissionsByIds(ids);
+        roleModel.setPermList(list);
+        return roleModel;
+    }
+
+    @Override
     public List<Role> findRoleByIds(List<Long> ids) {
         //ids not null
         List<Role> roles = new ArrayList<>(ids.size());
@@ -91,5 +108,10 @@ public class RoleServiceImpl implements RoleService {
     public List<Role> findRoleByIds(String ids) {
         List<Long> idList = IDUtil.parseIds(ids);
         return findRoleByIds(idList);
+    }
+
+    @Override
+    public List<Role> findAll() {
+        return roleDao.findAll();
     }
 }

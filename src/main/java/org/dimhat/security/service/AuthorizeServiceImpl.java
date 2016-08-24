@@ -51,7 +51,6 @@ public class AuthorizeServiceImpl implements AuthorizeService {
         }catch (DataAccessException de){
             perm = new Perm();
             perm.setParentId(0L);
-            perm.setRank(0);
             perm.setPermission("*");
             perm.setDescription("系统权限根节点");
             perm = permDao.save(perm);

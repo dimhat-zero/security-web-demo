@@ -40,9 +40,5 @@ public class RbacController {
         return "rbac/index";
     }
 
-    @RequestMapping(value="role",method = RequestMethod.GET)
-    public String role(){
-        return "rbac/role";
-    }
 
 }

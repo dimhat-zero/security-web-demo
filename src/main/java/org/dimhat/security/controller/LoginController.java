@@ -91,7 +91,7 @@ public class LoginController {
 		}
 
 		UserInfoModel userInfo = buildUserInfo(user);
-		logger.debug("用户：" + JSON.toJSONString(userInfo) + "登录成功");
+		logger.info("用户：" + JSON.toJSONString(userInfo) + "登录成功");
 
 		HttpSession session = request.getSession(true);
 		session.setAttribute(Constant.userInfo, userInfo);

@@ -22,7 +22,7 @@ public class PermDaoImpl implements PermDao {
 
     @Override
     public Perm save(final Perm perm) {
-        final String sql="insert into sys_perm(permission,description,is_deleted,is_menu,parent_id,rank,sub_rank_seq) values(?,?,?,?,?,?,?)";
+        final String sql="insert into sys_perm(permission,description,is_deleted,is_menu,parent_id) values(?,?,?,?,?)";
         GeneratedKeyHolder keyHolder=new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
             @Override
@@ -34,8 +34,6 @@ public class PermDaoImpl implements PermDao {
                 ps.setBoolean(index++,perm.getDeleted());
                 ps.setBoolean(index++,perm.getMenu());
                 ps.setLong(index++,perm.getParentId());
-                ps.setInt(index++,perm.getRank());
-                ps.setInt(index++,perm.getSubRankSeq());
                 return ps;
             }
         }, keyHolder);
@@ -51,8 +49,8 @@ public class PermDaoImpl implements PermDao {
 
     @Override
     public int update(Perm perm) {
-        String sql="update sys_perm set permission=?,description=?,is_deleted=?,is_menu=?,parent_id=?,rank=?,sub_rank_seq=? where id=?";
-        return jdbcTemplate.update(sql,perm.getPermission(),perm.getDescription(),perm.getDeleted(),perm.getMenu(),perm.getParentId(),perm.getRank(),perm.getSubRankSeq(),perm.getId());
+        String sql="update sys_perm set permission=?,description=?,is_deleted=?,is_menu=?,parent_id=? where id=?";
+        return jdbcTemplate.update(sql,perm.getPermission(),perm.getDescription(),perm.getDeleted(),perm.getMenu(),perm.getParentId(),perm.getId());
     }
 
     @Override
@@ -80,9 +78,9 @@ public class PermDaoImpl implements PermDao {
     }
 
     @Override
-    public List<Perm> findAll(boolean isDeleted) {
-        String sql="select * from sys_perm where is_deleted  = ?";
-        List<Perm> list = jdbcTemplate.query(sql, new PermRowMapper(),isDeleted);
+    public List<Perm> findAll() {
+        String sql="select * from sys_perm";
+        List<Perm> list = jdbcTemplate.query(sql, new PermRowMapper());
         return list;
     }
 

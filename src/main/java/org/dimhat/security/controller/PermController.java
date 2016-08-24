@@ -25,13 +25,15 @@ public class PermController {
     @Autowired
     private PermService permService;
 
+    //list
     @RequestMapping(value="",method = RequestMethod.GET)
     public String perm(Model model){
-        List<Perm> perms = permService.findAll(false);
+        List<Perm> perms = permService.findAll();
         model.addAttribute("perms",perms);
         return "rbac/perm";
     }
 
+    //add
     @RequestMapping(value="/{id}/addChild",method=RequestMethod.GET)
     public String addChild(@PathVariable("id")Long parentId,Model model){
         logger.debug("权限增加子节点页面请求："+parentId);
@@ -53,6 +55,7 @@ public class PermController {
         return JsonResult.OK;
     }
 
+    //update
     @RequestMapping(value = "/{id}/update",method = RequestMethod.GET)
     public String update(@PathVariable("id")Long id,Model model){
         logger.debug("权限更新页面请求："+id);
@@ -73,23 +76,11 @@ public class PermController {
         return JsonResult.OK;
     }
 
+    //delete
     @RequestMapping(value="/{id}/delete",method = RequestMethod.POST)
     @ResponseBody
     public JsonResult doDelete(@PathVariable("id")Long id){
         permService.delete(id);
-        return JsonResult.OK;
-    }
-    @RequestMapping(value="/{id}/shiftup",method=RequestMethod.POST)
-    @ResponseBody
-    public JsonResult doShiftUp(@PathVariable("id")Long id){
-        permService.shiftup(id);
-        return JsonResult.OK;
-    }
-
-    @RequestMapping(value="/{id}/shifdown",method=RequestMethod.POST)
-    @ResponseBody
-    public JsonResult doShiftDown(@PathVariable("id")Long id){
-        permService.shiftdown(id);
         return JsonResult.OK;
     }
 

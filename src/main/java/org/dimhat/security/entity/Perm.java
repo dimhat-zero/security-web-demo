@@ -9,8 +9,6 @@ public class Perm {
 
     private Boolean isMenu=true;//是否是菜单
     private Long parentId;//父节点id
-    private Integer rank;//排序
-    private Integer subRankSeq=0;//子序列排序递增
 
     public Boolean isRoot(){
         return parentId==0;
@@ -62,21 +60,5 @@ public class Perm {
 
     public void setPermission(String permission) {
         this.permission = permission;
-    }
-
-    public Integer getRank() {
-        return rank;
-    }
-
-    public void setRank(Integer rank) {
-        this.rank = rank;
-    }
-
-    public Integer getSubRankSeq() {
-        return subRankSeq;
-    }
-
-    public void setSubRankSeq(Integer subRankSeq) {
-        this.subRankSeq = subRankSeq;
     }
 }

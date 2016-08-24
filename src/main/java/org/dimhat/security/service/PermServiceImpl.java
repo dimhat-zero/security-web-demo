@@ -1,6 +1,9 @@
 package org.dimhat.security.service;
 
+import com.alibaba.fastjson.JSON;
+import org.apache.log4j.Logger;
 import org.dimhat.security.dao.PermDao;
+import org.dimhat.security.dao.RolePermDao;
 import org.dimhat.security.entity.Perm;
 import org.dimhat.security.model.PermUpdateForm;
 import org.dimhat.security.util.IDUtil;
@@ -20,6 +23,8 @@ import java.util.List;
 @Transactional
 public class PermServiceImpl implements PermService{
 
+    private static final Logger logger =Logger.getLogger(PermServiceImpl.class);
+
     @Autowired
     private PermDao permDao;
 
@@ -30,18 +35,10 @@ public class PermServiceImpl implements PermService{
         return perm;
     }
 
-    private Integer getRankForParent(long parentId){
-        if(parentId==0) return 0;//root rank is zero
-        Perm parentPerm = permDao.findByIdForUpdate(parentId);
-        Integer nextRank = parentPerm.getSubRankSeq()+1;
-        parentPerm.setSubRankSeq(nextRank);
-        return nextRank;
-    }
 
     @Override
     public Perm add(PermUpdateForm form) {
         Perm perm = trans(form);
-        perm.setRank(getRankForParent(perm.getParentId()));
         return permDao.save(perm);
     }
 
@@ -80,8 +77,8 @@ public class PermServiceImpl implements PermService{
     }
 
     @Override
-    public List<Perm> findAll(boolean isDeleted) {
-        return permDao.findAll(isDeleted);
+    public List<Perm> findAll() {
+        return permDao.findAll();
     }
 
     @Override
@@ -89,24 +86,6 @@ public class PermServiceImpl implements PermService{
         Perm perm = permDao.findById(id);
         perm.setDeleted(true);
         permDao.update(perm);
-    }
-
-    @Override
-    public void shiftup(Long id) {
-        //双向链表？ pre next
-        //find pre 事务开始前的前一个
-        String sql="select * from sys_perm where id < "+id+" order by id desc limit 1 for update";
-
-        //交换操作，如果 1 2 update 1 update 2, swap(3,2);
-
-        //swap rank
-    }
-
-    @Override
-    public void shiftdown(Long id) {
-        //find next
-        String sql="select * from sys_perm where id > ? order by id asc limit 1";
-        //swap rank
     }
 
 }

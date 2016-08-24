@@ -114,8 +114,8 @@ public class DefaultExceptionHandler {
 		return mav;
 	}
 	
-	//@ExceptionHandler({ ServiceException.class })
-	//@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler({ ServiceException.class })
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public ModelAndView jianlaException(NativeWebRequest request, ServiceException e) {
 		logger.error("发生业务异常",e);
 		ModelAndView mv = new ModelAndView();
@@ -124,8 +124,8 @@ public class DefaultExceptionHandler {
 		return mv;
 	}
 	
-	//@ExceptionHandler({Exception.class})
-	public ModelAndView nullPointerException(HttpServletRequest request, Exception e){
+	@ExceptionHandler({Exception.class})
+	public ModelAndView exception(HttpServletRequest request, Exception e){
 		logger.error("发生未知异常",e);
 		ModelAndView mav=new ModelAndView();
 		if(AjaxUtil.isAjaxRequest(request)){

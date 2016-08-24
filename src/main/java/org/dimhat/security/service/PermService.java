@@ -56,9 +56,6 @@ public interface PermService {
      */
     List<Perm> findPermissionsByIds(String ids);
 
-    List<Perm> findAll(boolean isDeleted);
+    List<Perm> findAll();
 
-    void shiftup(Long id);
-
-    void shiftdown(Long id);
 }

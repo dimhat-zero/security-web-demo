@@ -1,5 +1,7 @@
 package org.dimhat.security.dao;
 
+import java.util.List;
+
 /**
  * Created by think on 2016/8/17.
  */
@@ -12,4 +14,6 @@ public interface RolePermDao {
     int deleteRolePermByRoleId(Long roleId);
 
     int addRolePerm(Long roleId, Long permId);
+
+    List<Long> findPermIdsByRoleId(Long roleId);
 }

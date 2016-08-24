@@ -19,8 +19,6 @@ public class PermRowMapper  implements RowMapper<Perm> {
         perm.setMenu(rs.getBoolean("is_menu"));
         perm.setParentId(rs.getLong("parent_id"));
         perm.setPermission(rs.getString("permission"));
-        perm.setRank(rs.getInt("rank"));
-        perm.setSubRankSeq(rs.getInt("sub_rank_seq"));
         return perm;
     }
 }

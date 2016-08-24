@@ -8,8 +8,6 @@
 
     <link rel="stylesheet" href="/static/cus-icons.css">
     <link rel="stylesheet" href="/static/jquery-ui-1.12.0/jquery-ui.min.css">
-    <link rel="stylesheet" href="/static/jquery-treetable/stylesheets/jquery.treetable.css">
-    <link rel="stylesheet" href="/static/jquery-treetable/stylesheets/jquery.treetable.theme.default.css">
 
     <link rel="stylesheet" href="/css/style.css">
 
@@ -31,32 +29,28 @@
     <th width="25%">权限字符串</th>
     <th width="25%">权限描述</th>
     <th width="15%">菜单</th>
-    <th width="15%">排序号</th>
     <th width="20%">操作</th>
     </thead>
     <tbody>
-        <c:forEach var="perm" items="${perms}">
-        <tr data-tt-id="${perm.id}" <c:if test="${!perm.isRoot()}">data-tt-parent-id="${perm.parentId}"</c:if>>
-            <td>${perm.permission}</td>
-            <td>${perm.description}</td>
-            <td>${perm.menu?"是":"否"}</td>
-            <td>${perm.rank}</td>
+        <c:forEach var="role" items="${perms}">
+        <tr data-tt-id="${role.id}" <c:if test="${!role.isRoot()}">data-tt-parent-id="${role.parentId}"</c:if>>
+            <td>${role.permission}</td>
+            <td>${role.description}</td>
+            <td>${role.menu?"是":"否"}</td>
             <td>
-                <c:if test="${perm.menu}">
-                <i class="cus-add" title="添加子节点" data-id="${perm.id}"></i>
+                <c:if test="${role.menu}">
+                <i class="cus-add" title="添加子节点" data-id="${role.id}"></i>
                 </c:if>
-                <c:if test="${!perm.isRoot()}">
-                    <i class="cus-table-edit" title="修改" data-id="${perm.id}"></i>
-                    <i class="cus-arrow-up" title="上移" data-id="${perm.id}"></i>
-                    <i class="cus-arrow-down" title="下移" data-id="${perm.id}"></i>
-                    <i class="cus-delete" title="删除" data-id="${perm.id}" data-desc="${perm.description}"></i>
+                <c:if test="${!role.isRoot()}">
+                    <i class="cus-table-edit" title="修改" data-id="${role.id}"></i>
+                    <i class="cus-delete" title="删除" data-id="${role.id}" data-desc="${role.description}"></i>
                 </c:if>
             </td>
         </tr>
         </c:forEach>
     </tbody>
 </table>
-
+</div>
 
 <!-- 模态框（Modal） -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" data-backdrop="static"
@@ -142,7 +136,6 @@ $(function () {
         });
     });
 
-    $("#permTable").treetable({ expandable: true }).treetable("expandNode", ${perms[0].id});
 });
 </script>
 </body>
