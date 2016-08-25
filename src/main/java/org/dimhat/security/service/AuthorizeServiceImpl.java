@@ -2,6 +2,7 @@ package org.dimhat.security.service;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.log4j.Logger;
+import org.dimhat.security.Constant;
 import org.dimhat.security.dao.*;
 import org.dimhat.security.entity.Perm;
 import org.dimhat.security.entity.Role;
@@ -45,25 +46,19 @@ public class AuthorizeServiceImpl implements AuthorizeService {
     @PostConstruct
     public void init(){
         //create perm
-        Perm perm = null;
+        Perm perm = Perm.getRoot();
         try {
-            perm = permDao.findByPerm("*");
+            perm = permDao.findByPerm(perm.getPermission());
         }catch (DataAccessException de){
-            perm = new Perm();
-            perm.setParentId(0L);
-            perm.setPermission("*");
-            perm.setDescription("系统权限根节点");
             perm = permDao.save(perm);
         }
+        Perm.setRoot(perm);//set back to perm
 
         //create role
-        Role role=null;
+        Role role= Role.getAdmin();
         try{
-            role = roleDao.findByRole("admin");
+            role = roleDao.findByRole(role.getRoleName());
         }catch(DataAccessException e){
-            role = new Role();
-            role.setRoleName("admin");
-            role.setDescription("系统管理员");
             role = roleDao.save(role);
             //add role perm
             rolePermDao.addRolePerm(role.getId(),perm.getId());

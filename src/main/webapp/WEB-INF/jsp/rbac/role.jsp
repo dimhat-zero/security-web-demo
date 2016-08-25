@@ -24,7 +24,6 @@
 </head>
 <body>
 <div id="containtor">
-    新建角色<i class="cus-add" title="增加"></i>
     <table class="table" id="permTable">
         <thead>
         <th width="15%">角色名称</th>
@@ -34,16 +33,21 @@
         <th width="20%">操作</th>
         </thead>
         <tbody>
-        <c:forEach var="role" items="${roles}">
+        <c:forEach var="user" items="${roles}">
             <tr>
-                <td>${role.roleName}</td>
-                <td>${role.description}</td>
-                <td>${role.permNames()}</td>
+                <td>${user.roleName}</td>
+                <td>${user.description}</td>
+                <td>${user.permNames()}</td>
+                <td>${user.deleted?"是":"否"}</td>
                 <td>
-                    <c:if test="${role.roleName!='admin'}">
-                    <i class="cus-table-edit" title="修改" data-id="${role.id}"></i>
-                    <i class="cus-lock-add"></i><i class="cus-lock-delete"></i>
-                    <i class="cus-delete" title="删除" data-id="${role.id}" data-desc="${role.description}"></i>
+                    <c:if test="${user.roleName!='admin'}">
+                    <i class="cus-table-edit" title="修改" data-id="${user.id}"></i>
+                        <c:if test="${not user.deleted}"><i class="cus-lock-add" title="禁用" data-id="${user.id}"></i></c:if>
+                        <c:if test="${user.deleted}"><i class="cus-lock-delete" title="解锁" data-id="${user.id}"></i></c:if>
+                    <i class="cus-delete" title="删除" data-id="${user.id}" data-desc="${user.description}"></i>
+                    </c:if>
+                    <c:if test="${user.roleName=='admin'}">
+                        <i class="cus-add" title="增加"></i>
                     </c:if>
                 </td>
             </tr>
@@ -51,6 +55,7 @@
         </tbody>
     </table>
 </div>
+
 
 <!-- 模态框（Modal） -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" data-backdrop="static"
@@ -84,51 +89,6 @@
 <script src="/static/jquery-treetable/javascripts/src/jquery.treetable.js"></script>
 <script src="/js/common.js"></script>
 <script src="/js/jquery.form.js"></script>
-<script>
-    $(function () {
-        $(".cus-add").click(function () {
-            var id=$(this).data("id");
-            $("#myModalLabel").html("增加角色");
-            $("#myModal").modal("show");
-            var url = "/role/add";
-            $.get(url,function (data) {
-                $("#modal-content").html(data);
-                $("#editForm").prop("action",url);
-            });
-        });
-
-        $(".cus-table-edit").click(function () {
-            var id=$(this).data("id");
-            $("#myModalLabel").html("修改角色");
-            $("#myModal").modal("show");
-            var url="/role/"+id+"/update";
-            $.get(url,function (data) {
-                $("#modal-content").html(data);
-                $("#editForm").prop("action",url);
-            })
-        })
-
-        $(".cus-delete").click(function(){
-            var id=$(this).data("id");
-            var desc=$(this).data("desc");
-            if(confirm("是否删除角色【"+desc+"】")){
-                $.post("/role/"+id+"/delete",ajaxSuccessReload);
-            }
-        });
-        //ajax提交表单
-        $("#editSubmit").click(function () {
-            $("#editForm").ajaxSubmit({
-                success:function(data) {
-                    if(data && data.success){
-                        location.reload();
-                    }else{
-                        alert(data.msg);
-                    }
-                }
-            });
-        });
-
-    });
-</script>
+<script src="/js/role-manage.js"></script>
 </body>
 </html>

@@ -24,4 +24,8 @@ public interface RoleService {
     List<Role> findRoleByIds(String ids);
 
     List<Role> findAll();
+
+    void lock(Long id);
+
+    void unlock(Long id);
 }

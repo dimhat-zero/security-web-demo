@@ -5,6 +5,7 @@ import org.dimhat.security.entity.User;
 import org.dimhat.security.model.UserInfoModel;
 import org.dimhat.security.model.UserUpdateForm;
 import org.dimhat.security.service.UserService;
+import org.dimhat.security.web.annotation.RequireRole;
 import org.dimhat.security.web.annotation.Token;
 import org.dimhat.security.web.annotation.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.alibaba.fastjson.JSON;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("user")
@@ -29,6 +32,14 @@ public class UserController {
 	public String home(@UserInfo() UserInfoModel userInfo, Model model) {
 		logger.debug(JSON.toJSONString(userInfo));
 		return "user/home";
+	}
+
+	@RequestMapping(value = "",method = RequestMethod.GET)
+	@RequireRole("admin")
+	public String user(Model model){
+		List<User> users = userService.findAll();
+		model.addAttribute("users",users);
+		return "rbac/user";
 	}
 
     //使用token

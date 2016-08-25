@@ -1,19 +1,17 @@
 package org.dimhat.security.controller;
 
-import org.apache.commons.logging.Log;
 import org.apache.log4j.Logger;
 import org.dimhat.security.entity.Perm;
 import org.dimhat.security.entity.Role;
 import org.dimhat.security.model.RoleModel;
 import org.dimhat.security.model.RoleUpdateForm;
 import org.dimhat.security.model.base.JsonResult;
-import org.dimhat.security.model.base.ZNode;
+import org.dimhat.security.model.base.TreeNode;
 import org.dimhat.security.service.PermService;
 import org.dimhat.security.service.RoleService;
 import org.dimhat.security.web.annotation.RequireRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -91,7 +89,22 @@ public class RoleController {
         return  JsonResult.OK;
     }
 
-    //find select node
+    //lock
+    @RequestMapping(value="/{id}/lock",method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult lock(@PathVariable("id")Long id){
+        roleService.lock(id);
+        return  JsonResult.OK;
+    }
+
+    @RequestMapping(value="/{id}/unlock",method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult unlock(@PathVariable("id")Long id){
+        roleService.unlock(id);
+        return  JsonResult.OK;
+    }
+
+    //find role select perm node
     @RequestMapping(value="/permNode",method = RequestMethod.GET)
     @ResponseBody
     public JsonResult getRolePermZnode(Long id){
@@ -102,13 +115,10 @@ public class RoleController {
         //find all perm
         List<Perm> allPerms = permService.findAll();
         //build zNodes mark all perm if exist
-        List<ZNode> zNodes =  new ArrayList<>();
+        List<TreeNode> zNodes =  new ArrayList<>();
         for(Perm perm : allPerms){
             if(perm.isRoot()) continue;
-            ZNode zNode=new ZNode();
-            zNode.setId(perm.getId());
-            zNode.setName(perm.getDescription());
-            zNode.setpId(perm.getParentId());
+            TreeNode zNode=new TreeNode(perm.getId(),perm.getParentId(),perm.getDescription());
             zNode.setChecked(existPermIds.contains(perm.getId()));
             zNodes.add(zNode);
         }

@@ -12,7 +12,7 @@ import java.sql.SQLException;
 public class PermRowMapper  implements RowMapper<Perm> {
     @Override
     public Perm mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Perm perm = new Perm();
+        Perm perm = Perm.createPerm();
         perm.setId(rs.getLong("id"));
         perm.setDeleted(rs.getBoolean("is_deleted"));
         perm.setDescription(rs.getString("description"));

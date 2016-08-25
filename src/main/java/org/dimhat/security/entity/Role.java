@@ -6,6 +6,16 @@ public class Role {
     private String description;//角色描述
     private Boolean isDeleted=false;//是否删除
 
+    private static Role admin =  null;
+    public static Role getAdmin(){
+        if(admin==null){
+            admin = new Role();
+            admin.setRoleName("admin");
+            admin.setDescription("系统管理员");
+        }
+        return admin;
+    }
+
     public String getDescription() {
         return description;
     }

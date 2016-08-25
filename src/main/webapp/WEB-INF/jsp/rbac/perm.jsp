@@ -17,12 +17,68 @@
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
     <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
+    <link rel="stylesheet" href="/static/jquery-zTree-v3.5.15/css/zTreeStyle/zTreeStyle.css">
+    <script src="/static/jquery-zTree-v3.5.15/js/jquery.ztree.all-3.5.min.js"></script>
+
     <title>权限管理</title>
     <style>
         i {cursor:pointer;}
+        .ztree li span.button.dir_ico_open{
+            margin-right: 2px;
+            background-position: -110px -16px;
+            vertical-align: top;
+        }
+        .ztree li span.button.dir_ico_close{
+            margin-right: 2px;
+            background-position: -110px 0;
+            vertical-align: top;
+        }
+        .ztree li span.button.dir_ico_docu{
+            margin-right: 2px;
+            background-position: -110px 0px;
+            vertical-align: top;
+        }
+
+        /*侧边树形导航*/
+        .s-sidebar{
+            width:220px;
+            height:100%;
+            z-index: 1;
+            margin-top: 0px;
+            position: absolute;
+            /*position: fixed;*/
+            background: #fff;
+            box-shadow: 1px 0 3px #aaa;
+            overflow-x: scroll;
+        }
+        .s-sidebar > .tree-content{
+            margin-top: 120px;
+            padding:5px;
+            border-bottom: 1px solid #eee;
+        }
+        .s-sidebar > .tree-content > p{
+            line-height: 30px;
+            font-size: 16px;
+            margin:0;
+            padding:0;
+            text-indent: 10px;
+        }
     </style>
 </head>
 <body>
+
+<ol class="breadcrumb" id="dir_path_ol"></ol>
+
+<div class="s-sidebar">
+    <ul class="tree ztree" id="tree"></ul>
+    <form id="queryForm" style="display: none">
+        <input type="hidden" id="dir_id" name="parentId" value="0">
+        <input type="hidden" id="description" name="description">
+        <input type="hidden" name="withParent" value="true">
+    </form>
+</div>
+
+
 <div id="containtor">
 <table class="table" id="permTable">
     <thead>
@@ -32,22 +88,7 @@
     <th width="20%">操作</th>
     </thead>
     <tbody>
-        <c:forEach var="role" items="${perms}">
-        <tr data-tt-id="${role.id}" <c:if test="${!role.isRoot()}">data-tt-parent-id="${role.parentId}"</c:if>>
-            <td>${role.permission}</td>
-            <td>${role.description}</td>
-            <td>${role.menu?"是":"否"}</td>
-            <td>
-                <c:if test="${role.menu}">
-                <i class="cus-add" title="添加子节点" data-id="${role.id}"></i>
-                </c:if>
-                <c:if test="${!role.isRoot()}">
-                    <i class="cus-table-edit" title="修改" data-id="${role.id}"></i>
-                    <i class="cus-delete" title="删除" data-id="${role.id}" data-desc="${role.description}"></i>
-                </c:if>
-            </td>
-        </tr>
-        </c:forEach>
+
     </tbody>
 </table>
 </div>
@@ -84,59 +125,6 @@
 <script src="/static/jquery-treetable/javascripts/src/jquery.treetable.js"></script>
 <script src="/js/common.js"></script>
 <script src="/js/jquery.form.js"></script>
-<script>
-$(function () {
-    $(".cus-add").click(function () {
-        var id=$(this).data("id");
-        $("#myModalLabel").html("增加权限");
-        $("#myModal").modal("show");
-        var url = "/perm/"+id+"/addChild";
-        $.get(url,function (data) {
-            $("#modal-content").html(data);
-            $("#editForm").prop("action",url);
-        });
-    });
-
-    $(".cus-table-edit").click(function () {
-        var id=$(this).data("id");
-        $("#myModalLabel").html("修改权限");
-        $("#myModal").modal("show");
-        var url="/perm/"+id+"/update";
-        $.get(url,function (data) {
-            $("#modal-content").html(data);
-            $("#editForm").prop("action",url);
-        })
-    })
-
-    $(".cus-delete").click(function(){
-        var id=$(this).data("id");
-        var desc=$(this).data("desc");
-        if(confirm("是否删除权限【"+desc+"】")){
-            $.post("/perm/"+id+"/delete",ajaxSuccessReload);
-        }
-    });
-    $(".cus-arrow-up").click(function () {
-        var id=$(this).data("id");
-        $.post("/perm/"+id+"/shiftup",ajaxSuccessReload);
-    });
-    $(".cus-arrow-down").click(function () {
-        var id=$(this).data("id");
-        $.post("/perm/"+id+"/shiftdown",ajaxSuccessReload);
-    });
-    //ajax提交表单
-    $("#editSubmit").click(function () {
-        $("#editForm").ajaxSubmit({
-            success:function(data) {
-                if(data && data.success){
-                    location.reload();
-                }else{
-                    alert(data.msg);
-                }
-            }
-        });
-    });
-
-});
-</script>
+<script src="/js/perm-manage.js"></script>
 </body>
 </html>

@@ -2,6 +2,7 @@ package org.dimhat.security.service;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.log4j.Logger;
+import org.dimhat.security.authz.util.CollectionUtils;
 import org.dimhat.security.dao.PermDao;
 import org.dimhat.security.dao.RolePermDao;
 import org.dimhat.security.entity.Perm;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -30,7 +32,7 @@ public class PermServiceImpl implements PermService{
 
     //将form转换成perm实体
     private Perm trans(PermUpdateForm form){
-        Perm perm = new Perm();
+        Perm perm = Perm.createPerm();
         BeanUtils.copyProperties(form,perm);
         return perm;
     }
@@ -44,8 +46,10 @@ public class PermServiceImpl implements PermService{
 
     @Override
     public void delete(Long id) {
+        //delete sons
         String sql="delete from sys_perm where parent_id = "+id;
         permDao.executeSQL(sql);
+        //delete self
         permDao.delete(id);
     }
 
@@ -82,10 +86,37 @@ public class PermServiceImpl implements PermService{
     }
 
     @Override
-    public void fakeDelete(Long id) {
-        Perm perm = permDao.findById(id);
-        perm.setDeleted(true);
-        permDao.update(perm);
+    public List<Perm> findSubPermsByParentId(Long parentId) {
+        Perm perm = Perm.createEmpty();
+        perm.setParentId(parentId);
+        return query(perm);
+    }
+
+    @Override
+    public List<Perm> query(Perm perm) {
+        return permDao.query(perm);
+    }
+
+    @Override
+    public List<Perm> findPathById(Long id) {
+        List<Perm> result = new ArrayList<>();
+        Perm curr = permDao.findById(id);
+        if(curr.getMenu()){//olny add menu
+            result.add(curr);
+        }
+        while(!curr.isRoot()){
+            curr = permDao.findById(curr.getParentId());
+            result.add(curr);
+        }
+        Collections.reverse(result);
+        return result;
+    }
+
+    @Override
+    public List<Perm> findMenus() {
+        Perm perm = Perm.createEmpty();
+        perm.setMenu(true);
+        return query(perm);
     }
 
 }

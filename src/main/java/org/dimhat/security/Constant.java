@@ -20,4 +20,7 @@ public class Constant {
 
 	//登录出错次数限制次数，超出出现验证码
 	public static final Integer limitLoginTime = 3;
+
+	//根权限字符串
+	public static final String rootPerm = "*";
 }

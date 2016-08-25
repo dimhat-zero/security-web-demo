@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -75,6 +76,30 @@ public class PermDaoImpl implements PermDao {
     @Override
     public void executeSQL(String sql) {
         jdbcTemplate.execute(sql);
+    }
+
+    @Override
+    public List<Perm> query(Perm perm) {
+        StringBuilder sql=new StringBuilder("select * from sys_perm where 1=1");
+        List<Object> values = new ArrayList<>();
+        if(perm.getMenu()!=null){
+            sql.append(" and is_menu = ?");
+            values.add(perm.getMenu());
+        }
+        if(perm.getPermission()!=null){
+            sql.append(" and permission = ?");
+            values.add(perm.getPermission());
+        }
+        if(perm.getDeleted()!=null){
+            sql.append(" and is_deleted = ?");
+            values.add(perm.getDeleted());
+        }
+        if(perm.getParentId()!=null){
+            sql.append(" and parent_id = ?");
+            values.add(perm.getParentId());
+        }
+
+        return jdbcTemplate.query(sql.toString(),values.toArray(),new PermRowMapper());
     }
 
     @Override

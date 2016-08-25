@@ -15,6 +15,8 @@ public class RoleModel {
 
     private String description;
 
+    private Boolean isDeleted;
+
     //展示值
     private List<Perm> permList;//权限列表
 
@@ -42,6 +44,14 @@ public class RoleModel {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 
     public String getDescription() {

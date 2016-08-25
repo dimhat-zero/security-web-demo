@@ -16,12 +16,6 @@ public interface PermService {
     Perm add(PermUpdateForm form);
 
     /**
-     * 伪删除一个权限
-     * @param id
-     */
-    void fakeDelete(Long id);
-
-    /**
      * 真删除一个权限
      * 检验是否被角色引用
      * 如果被引用则失败抛出异常
@@ -58,4 +52,13 @@ public interface PermService {
 
     List<Perm> findAll();
 
+    //找到子权限
+    List<Perm> findSubPermsByParentId(Long parentId);
+
+    List<Perm> query(Perm perm);
+
+    //根据id找到路径
+    List<Perm> findPathById(Long id);
+
+    List<Perm> findMenus();
 }

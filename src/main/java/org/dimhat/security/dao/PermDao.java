@@ -32,4 +32,6 @@ public interface PermDao {
     List<Perm> findBySQL(String sql);
 
     void executeSQL(String sql);
+
+    List<Perm> query(Perm perm);
 }

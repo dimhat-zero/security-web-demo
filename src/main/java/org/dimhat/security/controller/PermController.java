@@ -5,16 +5,15 @@ import org.apache.log4j.Logger;
 import org.dimhat.security.entity.Perm;
 import org.dimhat.security.model.PermUpdateForm;
 import org.dimhat.security.model.base.JsonResult;
+import org.dimhat.security.model.base.TreeNode;
 import org.dimhat.security.service.PermService;
 import org.dimhat.security.web.annotation.RequireRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -31,6 +30,55 @@ public class PermController {
         List<Perm> perms = permService.findAll();
         model.addAttribute("perms",perms);
         return "rbac/perm";
+    }
+
+    @RequestMapping(value="dir-path",method = RequestMethod.GET)
+    @ResponseBody
+    public JsonResult dir_path(Long dir_id){//curr path
+        JsonResult result = new JsonResult();
+        List<Perm> permList = null;
+        if(dir_id==0L){
+            permList = new ArrayList<>();
+            permList.add(Perm.getRoot());
+        }else{
+            permList = permService.findPathById(dir_id);
+        }
+        result.setData(permList);
+        return result;
+    }
+
+    @RequestMapping(value = "dir-tree",method = RequestMethod.GET)
+    @ResponseBody
+    public JsonResult dir_tree(){
+        JsonResult result = new JsonResult();
+        List<Perm> menus = permService.findMenus();
+        List<TreeNode> nodes = new ArrayList<>();
+        for(Perm menu : menus){
+            TreeNode node = new TreeNode(menu.getId(),menu.getParentId(),menu.getDescription());
+            if(menu.isRoot()){
+                node.setOpen(true);//根节点打开
+            }
+            node.setIconSkin("dir");
+            nodes.add(node);
+        }
+        result.setData(nodes);
+        return result;
+    }
+    @RequestMapping(value="query",method=RequestMethod.GET)
+    @ResponseBody
+    public JsonResult query(Perm perm,@RequestParam(value="withParent",required = false,defaultValue = "false") Boolean withParent){
+        JsonResult result = new JsonResult();
+        List<Perm> child = permService.query(perm);
+        if(withParent){
+            Perm parent = permService.findPermissionById(perm.getParentId());
+            List<Perm> list = new ArrayList<>();
+            list.add(parent);
+            list.addAll(child);
+            result.setData(list);
+        }else{
+            result.setData(child);
+        }
+        return result;
     }
 
     //add
