@@ -39,6 +39,7 @@ UserInfoArgumentResolver处理参数注入
 也可以用MD5(MD5(passowrd)+salt)进行加密。
 
 ###单点登录
+Jasig CAS用于认证（我是谁）
 
 ##访问控制
 ###垂直权限管理
@@ -52,6 +53,7 @@ RBAC
 linux权限
 
 OAuth第三方授权
+用于授权（我能干什么）
 
 ##安全日志
 debug 用于调试，进行问题诊断
