@@ -20,10 +20,34 @@ public class UserModel {
 
     private Date lastLogin;                               //最后登录时间
 
-    private List<Role> role;
+    private List<Role> roles;
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
 
     public String roleNames(){
-        return "";
+        if(roles==null || roles.size()==0) return "";
+        StringBuilder sb = new StringBuilder();
+        for(Role role : roles){
+            sb.append(role.getDescription()).append(",");
+        }
+        sb.setLength(sb.length()-1);
+        return sb.toString();
+    }
+
+    public String roleIds(){
+        if(roles==null || roles.size()==0) return "";
+        StringBuilder sb = new StringBuilder();
+        for(Role role : roles){
+            sb.append(role.getId()).append(",");
+        }
+        sb.setLength(sb.length()-1);
+        return sb.toString();
     }
 
     public Long getId() {

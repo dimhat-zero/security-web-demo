@@ -30,6 +30,16 @@ public class RoleModel {
         return  sb.toString();
     }
 
+    public String permIds(){
+        if(permList==null || permList.size()==0) return "";
+        StringBuilder sb= new StringBuilder();
+        for(Perm perm : permList){
+            sb.append(perm.getId()).append(',');
+        }
+        sb.setLength(sb.length()-1);
+        return  sb.toString();
+    }
+
     public Long getId() {
         return id;
     }

@@ -3,11 +3,13 @@ package org.dimhat.security.controller;
 import org.apache.log4j.Logger;
 import org.dimhat.security.entity.User;
 import org.dimhat.security.model.UserInfoModel;
+import org.dimhat.security.model.UserModel;
 import org.dimhat.security.model.UserUpdateForm;
 import org.dimhat.security.service.UserService;
 import org.dimhat.security.web.annotation.RequireRole;
 import org.dimhat.security.web.annotation.Token;
 import org.dimhat.security.web.annotation.UserInfo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +19,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.alibaba.fastjson.JSON;
 
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 用户控制器
+ */
 @Controller
 @RequestMapping("user")
 public class UserController {
@@ -28,21 +34,10 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@RequestMapping(value = "home", method = RequestMethod.GET)
-	public String home(@UserInfo() UserInfoModel userInfo, Model model) {
-		logger.debug(JSON.toJSONString(userInfo));
-		return "user/home";
-	}
-
-	@RequestMapping(value = "",method = RequestMethod.GET)
-	@RequireRole("admin")
-	public String user(Model model){
-		List<User> users = userService.findAll();
-		model.addAttribute("users",users);
-		return "rbac/user";
-	}
-
-    //使用token
+	/**
+	 * 用户修改信息
+	 * 使用token
+	 */
     @RequestMapping(value = "update", method = RequestMethod.GET)
     @Token(create = true)
 	public String userInfoUpdate(@UserInfo() UserInfoModel userInfo, Model model) {

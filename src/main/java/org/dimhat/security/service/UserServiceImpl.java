@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.dimhat.security.dao.UserDao;
+import org.dimhat.security.dao.UserRoleDao;
 import org.dimhat.security.entity.Role;
 import org.dimhat.security.entity.User;
 import org.dimhat.security.exception.AccountNotFindException;
@@ -36,6 +37,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private UserRoleDao userRoleDao;
 
     /**
      * @see org.dimhat.security.service.UserService#register(org.dimhat.security.entity.User)
@@ -95,5 +98,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAll() {
         return userDao.findAll();
+    }
+
+    @Override
+    public List<Role> findRolesByUserId(Long userId) {
+        return userRoleDao.findRolesByUserId(userId);
     }
 }

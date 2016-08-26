@@ -41,6 +41,12 @@ public class UserRoleDaoImpl implements UserRoleDao {
     }
 
     @Override
+    public int deleteUserRolesByUserId(Long userId) {
+        String sql="delete from sys_user_role where user_id = ?";
+        return jdbcTemplate.update(sql,userId);
+    }
+
+    @Override
     public UserRole findById(Long id) {
         String sql="select * from sys_user_role where id=?";
         UserRole userRole = jdbcTemplate.queryForObject(sql, new RowMapper<UserRole>() {

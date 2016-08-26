@@ -103,13 +103,9 @@ public class LoginController {
 
 	private UserInfoModel buildUserInfo(User user) {
 		UserInfoModel userInfo = new UserInfoModel();
-        //test
-        Set<String> role = new HashSet<>();
-        role.add("admin");
-        userInfo.setRoles(role);
-        userInfo.setPerms(role);
-        //userInfo.setRoles(authorizeService.findRoles(user.getId()));
-        //userInfo.setPerms(authorizeService.findPerms(user.getId()));
+
+        userInfo.setRoles(authorizeService.findRoles(user.getId()));
+        userInfo.setPerms(authorizeService.findPerms(user.getId()));
 		BeanUtils.copyProperties(user, userInfo);
 		return userInfo;
 	}

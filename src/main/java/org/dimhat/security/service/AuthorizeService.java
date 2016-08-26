@@ -1,5 +1,6 @@
 package org.dimhat.security.service;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -16,4 +17,6 @@ public interface AuthorizeService {
 
     //find user's all perms str
     Set<String> findPerms(Long userId);
+
+    void updateUserRoles(Long id, List<Long> roleIds);
 }

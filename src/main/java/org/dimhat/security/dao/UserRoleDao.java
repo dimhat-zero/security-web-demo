@@ -19,4 +19,5 @@ public interface UserRoleDao {
     //find user's all role
     List<Role> findRolesByUserId(Long userId);
 
+    int deleteUserRolesByUserId(Long userId);
 }

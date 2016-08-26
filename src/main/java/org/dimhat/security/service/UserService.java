@@ -1,5 +1,6 @@
 package org.dimhat.security.service;
 
+import org.dimhat.security.entity.Role;
 import org.dimhat.security.entity.User;
 import org.dimhat.security.model.UserUpdateForm;
 
@@ -22,4 +23,6 @@ public interface UserService {
 	void update(UserUpdateForm form);
 
     List<User> findAll();
+
+    List<Role> findRolesByUserId(Long userId);
 }

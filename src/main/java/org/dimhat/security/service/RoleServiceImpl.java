@@ -52,6 +52,7 @@ public class RoleServiceImpl implements RoleService {
 
     private void addRolePerm(Long roleId,List<Long> permIds){
         int count=0;
+        logger.debug("add role["+roleId+"] perms "+permIds+"");
         for(Long permId:permIds){
             count+=rolePermDao.addRolePerm(roleId,permId);
         }
@@ -87,7 +88,6 @@ public class RoleServiceImpl implements RoleService {
         RoleModel roleModel = new RoleModel();
         BeanUtils.copyProperties(role,roleModel);
         //find perms
-
         List<Long> ids = rolePermDao.findPermIdsByRoleId(role.getId());
         List<Perm> list = permService.findPermissionsByIds(ids);
         roleModel.setPermList(list);

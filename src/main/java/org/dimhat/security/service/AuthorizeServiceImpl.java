@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -95,11 +97,36 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 
     @Override
     public Set<String> findRoles(Long userId) {
-        return null;
+        List<Role> userRoles = userRoleDao.findRolesByUserId(userId);
+        Set<String> roles  = new HashSet<>(userRoles.size());
+        for(Role userRole : userRoles ){
+            roles.add(userRole.getRoleName());
+        }
+        return roles;
     }
 
     @Override
     public Set<String> findPerms(Long userId) {
-        return null;
+        List<Role> userRoles = userRoleDao.findRolesByUserId(userId);
+        Set<String> perms  = new HashSet<>();
+        for(Role userRole : userRoles ){
+            List<Long> permIds = rolePermDao.findPermIdsByRoleId(userRole.getId());
+            for(Long permId : permIds){
+                Perm perm = permDao.findById(permId);
+                perms.add(perm.getPermission());
+            }
+        }
+        return perms;
+    }
+
+    @Override
+    public void updateUserRoles(Long userId, List<Long> roleIds) {
+        //update role permission
+        int deleteCount = userRoleDao.deleteUserRolesByUserId(userId);
+        logger.debug("delete user["+userId+"]'s all role count["+deleteCount+"]");
+        //add new roles
+        for(Long roleId  : roleIds){
+            addUserRole(userId,roleId);
+        }
     }
 }

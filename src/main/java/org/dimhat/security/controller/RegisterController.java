@@ -56,6 +56,7 @@ public class RegisterController {
 				return "redirect:register";
 			}
 
+			ra.addFlashAttribute("msg","恭喜你["+username+"]注册成功，现在登录！");
 			logger.debug("注册用户成功！用户名[" + username + "]");
 			return "redirect:login";
 		} else {
