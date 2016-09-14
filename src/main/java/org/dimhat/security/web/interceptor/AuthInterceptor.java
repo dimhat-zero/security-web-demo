@@ -185,7 +185,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
             return;
         }else if(logical==Logical.OR){
             for(String needPerm : needPerms){
-                if(perms.contains(needPerm)) return;
+                if(authorizingRealm.isPermitted(needPerm,userInfo)) return;
             }
             throw new UnauthorizeException("未授权的访问，请求路径["+requestURI+"]需要任一权限"+JSON.toJSONString(needPerms)+"");
         }
